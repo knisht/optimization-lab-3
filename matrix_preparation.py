@@ -4,8 +4,8 @@ from typing import List
 import numpy as np
 
 
-def prepare_matrix(full_matrix: np.ndarray, positions: List[int]) -> np.ndarray:
-    cur_matrix = deepcopy(full_matrix)
+def prepare_matrix(full_matrix: List[List[float]], positions: List[int]) -> np.ndarray:
+    cur_matrix = deepcopy(np.array(full_matrix))
     used = {}
     for pos in positions:
         j = -1
