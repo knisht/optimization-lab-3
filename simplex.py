@@ -3,6 +3,8 @@ from typing import Optional, List, Tuple
 
 import numpy as np
 
+from utils import format_list
+
 
 def find_acceptable_solution(full_matrix: List[List[float]]) -> Optional[Tuple[List[int], List[float]]]:
     full_matrix_np = np.array(full_matrix)
@@ -53,7 +55,7 @@ def simplex_method(full_matrix: np.ndarray, f: np.ndarray, positions: List[int])
     Tuple[np.ndarray, List[int], float]]:
     cur_matrix = deepcopy(full_matrix)
     m = cur_matrix.shape[0]
-    cur_matrix = np.vstack((cur_matrix, np.append(np.array([0]), f)))
+    cur_matrix = np.vstack((cur_matrix, np.append(np.array([0]), deepcopy(f))))
     sorted_poss = []
     for i in range(m):
         for j in range(len(positions)):
@@ -65,6 +67,13 @@ def simplex_method(full_matrix: np.ndarray, f: np.ndarray, positions: List[int])
     it = 0
     while True and it < 100:
         it += 1
+        # my_res = np.zeros(cur_matrix.shape[1] - 1)
+        # val = 0.0
+        # for i in range(len(sorted_poss)):
+        #     my_res[sorted_poss[i] - 1] = cur_matrix[i][0]
+        #     val += cur_matrix[i][0] * f[sorted_poss[i] - 1]
+        # print(format_list(my_res.tolist()))
+        # print(cur_matrix[-1][0], )
         chosen_column = choose_column(cur_matrix)
         if chosen_column is None:
             break
@@ -77,5 +86,6 @@ def simplex_method(full_matrix: np.ndarray, f: np.ndarray, positions: List[int])
     pre_result = np.zeros(cur_matrix.shape[1] - 1)
     for i in range(len(sorted_poss)):
         pre_result[sorted_poss[i] - 1] = cur_matrix[i][0]
+    # print("----")
     return pre_result, sorted_poss, -cur_matrix[-1][0]
 

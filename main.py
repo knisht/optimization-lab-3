@@ -3,12 +3,9 @@ from typing import List, Optional, Tuple
 
 import numpy as np
 
+from matrix_preparation import prepare_matrix
 from solution import full_solve_maximize, solve_minimize, full_solve_minimize
-
-
-def format_list(list_: List[float]) -> str:
-    return '[' + ' '.join(list(map(lambda s: f'{s:.2f}', list_))) + ']'
-
+from utils import format_list
 
 if __name__ == '__main__':
     input1 = [[4.0, 3.0, 1.0, -1.0, 1.0],
@@ -53,7 +50,7 @@ if __name__ == '__main__':
     solve_matrices = [input1, input2, input3, input4, input6]
     solve_fs = [f1, f2, f3, f4, f6]
     solve_pos = [pos1, pos2, pos3, pos4, pos6]
-    solve_nums = [1, 2, 3, 4, 6]
+    solve_nums = []
     full_solve_matrices = [input5, input7]
     full_solve_fs = [f5, f7]
     full_solve_nums = [5, 7]
@@ -70,11 +67,12 @@ if __name__ == '__main__':
         print("====================")
 
     for matrix, f, num in zip(full_solve_matrices, full_solve_fs, full_solve_nums):
-        point, val, positions, vec = full_solve_minimize(matrix, f)
+        point, val, positions, vec = full_solve_minimize(deepcopy(matrix), f)
         print("Answer for num: ", num)
         print("Resulting point: ", format_list(point.tolist()))
         print("Function value: ", val)
         print("Starting point: ", format_list(vec))
         print("Base: ", positions)
         print("====================")
-
+        if (num == 7):
+            print(prepare_matrix(matrix, [2, 3, 5]))
