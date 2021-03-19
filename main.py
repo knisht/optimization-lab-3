@@ -50,12 +50,11 @@ if __name__ == '__main__':
     solve_matrices = [input1, input2, input3, input4, input6]
     solve_fs = [f1, f2, f3, f4, f6]
     solve_pos = [pos1, pos2, pos3, pos4, pos6]
-    solve_nums = []
+    solve_nums = [1]
     full_solve_matrices = [input5, input7]
     full_solve_fs = [f5, f7]
     full_solve_nums = [5, 7]
 
-    # print(solve_minimize(input3, f3, pos3))
     for matrix, f, pos, num in zip(solve_matrices, solve_fs, solve_pos, solve_nums):
         point, val = solve_minimize(matrix, f, pos)
         print("Answer for num: ", num)
@@ -67,7 +66,11 @@ if __name__ == '__main__':
         print("====================")
 
     for matrix, f, num in zip(full_solve_matrices, full_solve_fs, full_solve_nums):
-        point, val, positions, vec = full_solve_minimize(deepcopy(matrix), f)
+        solution = full_solve_minimize(deepcopy(matrix), f)
+        if solution is None:
+            print("No answer")
+            continue
+        point, val, positions, vec = solution
         print("Answer for num: ", num)
         print("Resulting point: ", format_list(point.tolist()))
         print("Function value: ", val)

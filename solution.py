@@ -27,13 +27,17 @@ def solve_minimize(full_matrix: List[List[float]], f: List[float], positions: Li
 
 
 def full_solve_maximize(full_matrix: List[List[float]], f: List[float]) -> Optional[Tuple[np.ndarray, float, List[int], List[float]]]:
-    positions, vec = find_acceptable_solution(full_matrix)
-    if positions is None:
+    solution = find_acceptable_solution(full_matrix)
+    if solution is None:
         return None
+    positions, vec = solution
     point, res = solve_maximize(full_matrix, f, positions)
     return point, res, positions, vec
 
 
 def full_solve_minimize(full_matrix: List[List[float]], f: List[float]) -> Optional[Tuple[np.ndarray, float, List[int], List[float]]]:
-    point, val, pos, vec = full_solve_maximize(full_matrix, (np.array(f) * -1).tolist())
+    solution = full_solve_maximize(full_matrix, (np.array(f) * -1).tolist())
+    if solution is None:
+        return None
+    point, val, pos, vec = solution
     return point, -val, pos, vec
