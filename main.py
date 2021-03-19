@@ -4,7 +4,8 @@ from typing import List, Optional, Tuple
 import numpy as np
 
 from matrix_preparation import prepare_matrix
-from solution import full_solve_maximize, solve_minimize, full_solve_minimize
+from solution import full_solve_maximize, solve_minimize, full_solve_minimize, solve_maximize
+from trasform import solve_minimize_leq
 from utils import format_list
 
 if __name__ == '__main__':
@@ -34,6 +35,12 @@ if __name__ == '__main__':
               [11., 1., 14., 10., -10.]]
     f5 = [-1., 4., -3., 10.]
 
+    input6_2 = [[3., 1., 3., 3., 1.],
+              [4., 2., 0., 3., -1.]]
+    f6_2 = [-1., 5., 1., -1.]
+    print(solve_minimize_leq(input6_2, f6_2, [True, True]))
+    # exit(0)
+
     input6 = [[3., 1., 3., 3., 1., 1., 0.],
               [4., 2., 0., 3., -1., 0., 1.]]
     f6 = [-1., 5., 1., -1., 0., 0.]
@@ -44,13 +51,26 @@ if __name__ == '__main__':
               [30., 10., 1., 3., 6., -7.]]
     f7 = [-1., -1., 1., -1., 2.]
 
+    # example of infinite answer
+    input8 = [[10, 1., -1]]
+    f8 = [1., 1.]
+    print(solve_maximize(input8, f8, [1]))
+
+    # example where simplex method gets hung up without correct criteria of choose
+    input9 = [[0., 0., 1., 0., 0., -3., -5./4., 7., 1/50.],
+              [0., 1., 0., 0., 0., 1./3., 1./6, -1., -1./50.],
+              [0., 0., 0., 1., 0., 75./2, -25./4., 175./2., 1./4.],
+              [1., 0., 0., 0., 1., 0., 0., 0., 1.]]
+    f9 = [0., 0., 0., 0., 200., 175., -1100., -2.]
+    print(solve_maximize(input9, f9, [2, 1, 3, 4]))
+
     full_matrices = [input1, input2, input3, input4, input5, input6, input7]
     fs = [f1, f2, f3, f4, f5, f6, f7]
 
     solve_matrices = [input1, input2, input3, input4, input6]
     solve_fs = [f1, f2, f3, f4, f6]
     solve_pos = [pos1, pos2, pos3, pos4, pos6]
-    solve_nums = [1]
+    solve_nums = [1, 2, 3, 4, 6]
     full_solve_matrices = [input5, input7]
     full_solve_fs = [f5, f7]
     full_solve_nums = [5, 7]

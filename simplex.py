@@ -34,7 +34,7 @@ def choose_column(cur_matrix: np.ndarray) -> Optional[int]:
     return None
 
 
-def choose_row(cur_matrix: np.ndarray, chosen_column: int) -> Optional[int]:
+def choose_row(cur_matrix: np.ndarray, chosen_column: int, positions: List[int]) -> Optional[int]:
     # todo: check if function has maximum
     result = 1e9
     result_ind = -1
@@ -42,7 +42,13 @@ def choose_row(cur_matrix: np.ndarray, chosen_column: int) -> Optional[int]:
     column = cur_matrix[:, chosen_column]
     # print(b)
     # print(column)
+    # print(chosen_column)
     for i in range(len(b) - 1):
+        # print(b[i], column[i])
+        if column[i] > 1e-6 and abs(b[i] / column[i] - result) < 1e-6 and positions[result_ind] > positions[i]:
+            result_ind = i
+            result = b[i] / column[i]
+            continue
         if column[i] > 1e-6 and b[i] / column[i] < result:
             result_ind = i
             result = b[i] / column[i]
@@ -76,7 +82,7 @@ def simplex_method(full_matrix: np.ndarray, f: np.ndarray, positions: List[int])
         chosen_column = choose_column(cur_matrix)
         if chosen_column is None:
             break
-        chosen_row = choose_row(cur_matrix, chosen_column)
+        chosen_row = choose_row(cur_matrix, chosen_column, positions)
         if chosen_row is None:
             return chosen_row
         cur_matrix[chosen_row] /= cur_matrix[chosen_row][chosen_column]
@@ -84,6 +90,9 @@ def simplex_method(full_matrix: np.ndarray, f: np.ndarray, positions: List[int])
             if i != chosen_row and abs(cur_matrix[i][chosen_column]) >= 1e-6:
                 cur_matrix[i] -= cur_matrix[chosen_row] * cur_matrix[i][chosen_column]
         sorted_poss[chosen_row] = chosen_column
+        # print(sorted_poss)
+    if it == 100:
+        raise Exception("Iteration limit")
     pre_result = np.zeros(cur_matrix.shape[1] - 1)
     for i in range(len(sorted_poss)):
         pre_result[sorted_poss[i] - 1] = cur_matrix[i][0]
